@@ -57,7 +57,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "benefits-calculator:build"
+            "browserTarget": "benefits-calculator:build",
+            "port": 7070
           },
           "configurations": {
             "production": {
