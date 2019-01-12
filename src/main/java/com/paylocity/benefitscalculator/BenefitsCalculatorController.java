@@ -1,14 +1,16 @@
 package com.paylocity.benefitscalculator;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.paylocity.benefitscalculator.entities.Employee;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 public class BenefitsCalculatorController {
 
+//    @CrossOrigin(origins = "http://localhost:7070")
+    @CrossOrigin()
     @RequestMapping("/test")
-    public String string(@RequestParam(value="echo", defaultValue = "Test Works") String echoValue) {
-        return echoValue;
+    public Employee test(@RequestParam(value="echo", defaultValue = "Test Works") String echoValue) {
+        return new Employee(echoValue + echoValue);
     }
 }
