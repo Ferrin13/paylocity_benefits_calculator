@@ -19,16 +19,16 @@ public class EmployeeInfo {
         employeeRepository = new Repository<>();
     }
 
-    public void addEmployee(Employee employee) {
-        employeeRepository.addEntity(employee);
+    public Employee addEmployee(Employee employee) {
+        return employeeRepository.addEntity(employee);
     }
 
     public Optional<Employee> getEmployee(int employeeId) {
         return employeeRepository.getById(employeeId);
     }
 
-    public void updateEmployee(Employee employee) {
-        employeeRepository.updateEntity(employee);
+    public Employee updateEmployee(Employee employee) {
+        return employeeRepository.updateEntity(employee);
     }
 
     public void deleteEmployee(int employeeId) {

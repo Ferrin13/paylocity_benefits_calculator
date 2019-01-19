@@ -1,24 +1,56 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<div>
-  <button (click)="onClick('Boom')">Test</button>
-  <span>Echo text is: {{echoText}}</span>
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-sidenav-container>
+  <div style="text-align:center">
+    <h1>
+      Welcome to {{ title }}!
+    </h1>
+  </div>
+    <!--<img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">-->
+  <div fxLayout="row">
+    <mat-card fxFlex="595px" style="margin: 10px">
+      <h4>Selected Employee: {{selectedEmployee ? selectedEmployee.lastName + ", " + selectedEmployee.firstName : ""}}</h4>
+    </mat-card>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="top">
+    <mat-card fxFlex="325px" style="margin: 10px">
+      <mat-card-title>
+        Employee List
+      </mat-card-title>
+      <mat-list #employeeSelectionList style="height: 500px; overflow-y: auto">
+        <mat-list-item *ngFor="let employee of employeeList" (click)="selectEmployee(employee)" [ngClass]="employee == selectedEmployee ? 'list-item-selected' : 'list-item-unselected'">
+          <mat-icon matListIcon>account_circle</mat-icon>
+          <h3 matLine>{{employee.lastName}}, {{employee.firstName}}</h3>
+          <p matLine>
+            <span>Dependents: {{employee.dependents ? employee.dependents.length : 0}}</span>
+          </p>
+          <button mat-icon-button (click)="deleteEmployee(employee)">
+            <mat-icon class="mat-24">delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+      <mat-card-actions>
+        <button mat-raised-button (click)="addEmployeeDialog()" color="primary" style="margin: auto" >Add Employee</button>
+      </mat-card-actions>
+    </mat-card>
+    <mat-card fxFlex="300px" fxFlexAlign="top" style="margin: 10px">
+      <mat-card-title-group>
+        <mat-card-title>Dependents List</mat-card-title>
+        <mat-card-subtitle>{{selectedEmployee ? selectedEmployee.firstName + " " + selectedEmployee.lastName + "'s dependents" : dependentListDefaultTitle}}</mat-card-subtitle>
+      </mat-card-title-group>
+      <mat-list #dependentDisplayList style="height: 500px; overflow-y: auto">
+        <mat-list-item *ngFor="let dependent of selectedEmployee ? selectedEmployee.dependents : []">
+          <mat-icon mat-list-icon>{{getDependentIcon(dependent)}}</mat-icon>
+          <h3 mat-line>{{dependent.lastName}}, {{dependent.firstName}}</h3>
+          <button mat-icon-button (click)="deleteDependent(dependent)">
+            <mat-icon class="mat-24">delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+      <mat-card-actions>
+        <button mat-raised-button (click)="addDependentDialog()" color="primary" style="margin: auto" [disabled]="!selectedEmployee" >Add Dependent</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</mat-sidenav-container>
+
+
 

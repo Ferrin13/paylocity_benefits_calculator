@@ -11,6 +11,6 @@ public class BenefitsCalculatorController {
     @CrossOrigin()
     @RequestMapping("/test")
     public Employee test(@RequestParam(value="echo", defaultValue = "Test Works") String echoValue) {
-        return new Employee(echoValue + echoValue);
+        return new Employee(echoValue + echoValue, echoValue);
     }
 }

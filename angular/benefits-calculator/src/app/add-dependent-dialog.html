@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Add dependent info</h1>
+<div mat-dialog-content>
+  <p>Dependent First Name</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.firstName">
+  </mat-form-field>
+  <p>Dependent last Name</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.lastName">
+  </mat-form-field>
+  <p>Dependent type</p>
+  <mat-form-field>
+    <mat-select [(ngModel)]="data.dependentType">
+      <mat-option *ngFor="let dependentType of data.dependentTypes" [value]="dependentType">
+        {{dependentType}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

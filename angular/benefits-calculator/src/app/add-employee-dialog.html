@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add employee info</h1>
+<div mat-dialog-content>
+  <p>Employee First Name</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.firstName">
+  </mat-form-field>
+  <p>Employee last Name</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.lastName">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

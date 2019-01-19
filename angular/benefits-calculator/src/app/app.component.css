@@ -1,0 +1,17 @@
+::ng-deep.mat-pseudo-checkbox{
+  display: none !important;
+}
+
+.list-item-unselected {
+  cursor: pointer;
+}
+
+.list-item-unselected:hover {
+  background-color: lightblue;
+}
+
+.list-item-selected {
+  cursor: pointer;
+  background-color: darkgrey;
+}
+
