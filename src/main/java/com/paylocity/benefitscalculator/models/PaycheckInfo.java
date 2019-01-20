@@ -22,8 +22,9 @@ public class PaycheckInfo {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public BigDecimal setAmount(BigDecimal amount) {
         this.amount = amount;
+        return this.getAmount();
     }
 
     public int getNumPerYear() {
@@ -31,6 +32,7 @@ public class PaycheckInfo {
     }
 
     public int setNumPerYear(int numPerYear) {
-        return this.numPerYear = numPerYear;
+        this.numPerYear = numPerYear;
+        return this.getNumPerYear();
     }
 }

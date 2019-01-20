@@ -2,6 +2,7 @@ package com.paylocity.benefitscalculator.controllers;
 
 import com.paylocity.benefitscalculator.entities.Dependent;
 import com.paylocity.benefitscalculator.entities.Employee;
+import com.paylocity.benefitscalculator.entities.SalarySummary;
 import com.paylocity.benefitscalculator.models.EmployeeInfo;
 import com.paylocity.benefitscalculator.utility.SalaryCalculator;
 import org.springframework.http.HttpStatus;
@@ -90,14 +91,13 @@ public class EmployeeController {
         getEmployeeOrThrow(employeeId, employeeInfo).getDependents().deleteById(dependentId);
     }
 
-    @GetMapping("/{employeeId}/benefit-deductions")
-    public Map<SalaryCalculator.PayPeriodLength, BigDecimal> getBenefitDeductions(@PathVariable int employeeId) {
-        return salaryCalculator.getEmployeeDeductions(employeeId);
-    }
-
-    @GetMapping("/{employeeId}/adjusted-income")
-    public Map<SalaryCalculator.PayPeriodLength, BigDecimal> getAdjustedSalary(@PathVariable int employeeId) {
-        return salaryCalculator.getEmployeeAdjustedSalary(employeeId);
+    @GetMapping("/{employeeId}/salary/summary")
+    public SalarySummary getSalary(@PathVariable int employeeId) {
+        SalarySummary output = new SalarySummary();
+        output.setSalary(salaryCalculator.getEmployeeRawSalary(employeeId));
+        output.setAdjustedSalary(salaryCalculator.getEmployeeAdjustedSalary(employeeId));
+        output.setDeductions(salaryCalculator.getEmployeeDeductions(employeeId));
+        return output;
     }
 
     @ExceptionHandler

@@ -17,8 +17,8 @@ public class PaycheckController {
     }
 
     @PutMapping("/amount")
-    public void setPaycheckAmount(@RequestBody BigDecimal paycheckAmount) {
-        paycheckInfo.setAmount(paycheckAmount);
+    public BigDecimal setPaycheckAmount(@RequestBody BigDecimal paycheckAmount) {
+        return paycheckInfo.setAmount(paycheckAmount);
     }
 
     @GetMapping("/num-yearly")
@@ -27,7 +27,7 @@ public class PaycheckController {
     }
 
     @PutMapping("/num-yearly")
-    public void setNumYearlyPaychecks(@RequestBody int numYearlyPaychecks) {
-        paycheckInfo.setNumPerYear(numYearlyPaychecks);
+    public int setNumYearlyPaychecks(@RequestBody int numYearlyPaychecks) {
+        return paycheckInfo.setNumPerYear(numYearlyPaychecks);
     }
 }
