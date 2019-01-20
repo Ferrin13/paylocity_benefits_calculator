@@ -10,7 +10,7 @@ import {
   MatDialogModule, MatFormFieldModule,
   MatIconModule, MatInputModule,
   MatListModule, MatOptionModule, MatSelectModule,
-  MatSidenavModule, MatToolbarModule
+  MatSidenavModule, MatSliderModule, MatToolbarModule
 } from "@angular/material";
 import {FormsModule} from "@angular/forms";
 import {FlexLayoutModule} from "@angular/flex-layout";
@@ -37,7 +37,8 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     MatToolbarModule,
     FlexLayoutModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSliderModule
   ],
   providers: [],
   entryComponents: [AddEmployeeDialog, AddDependentDialog],

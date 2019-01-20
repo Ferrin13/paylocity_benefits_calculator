@@ -49,6 +49,100 @@
         <button mat-raised-button (click)="addDependentDialog()" color="primary" style="margin: auto" [disabled]="!selectedEmployee" >Add Dependent</button>
       </mat-card-actions>
     </mat-card>
+    <mat-card style="margin: 10px">
+      <mat-card-title-group>
+        <mat-card-title>
+          Selected Employee
+        </mat-card-title>
+        <mat-card-subtitle>{{selectedEmployee ? selectedEmployee.firstName + " " + selectedEmployee.lastName + "'s salary" : dependentListDefaultTitle}}</mat-card-subtitle>
+      </mat-card-title-group>
+      <div fxLayout="column">
+        <mat-card style="margin: 10px;">
+          <mat-card-title>Salary</mat-card-title>
+          <mat-card-content>
+            <p *ngFor="let periodLength of getPayPeriodLengths()" >
+              {{periodLength}}: ${{selectedEmployeeSalarySummary.salary[periodLength]}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="margin: 10px;">
+          <mat-card-title-group>
+            <mat-card-title>Adjusted Salary</mat-card-title>
+            <mat-card-subtitle>Salary minus deductions</mat-card-subtitle>
+          </mat-card-title-group>
+          <mat-card-content>
+            <p *ngFor="let periodLength of getPayPeriodLengths()" >
+              {{periodLength}}: ${{selectedEmployeeSalarySummary.adjustedSalary[periodLength]}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="margin: 10px;">
+          <mat-card-title>Deductions</mat-card-title>
+          <mat-card-content>
+            <p *ngFor="let periodLength of getPayPeriodLengths()" >
+              {{periodLength}}: ${{selectedEmployeeSalarySummary.deductions[periodLength]}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card>
+    <mat-card style="margin: 10px">
+      <mat-card-title-group>
+        <mat-card-title>Totals</mat-card-title>
+        <mat-card-subtitle>Total of all employ salaries</mat-card-subtitle>
+      </mat-card-title-group>
+
+      <div fxLayout="column">
+        <mat-card style="margin: 10px;">
+          <mat-card-title>Salary</mat-card-title>
+          <mat-card-content>
+            <p *ngFor="let periodLength of getPayPeriodLengths()" >
+              {{periodLength}}: ${{salarySummary.salary[periodLength]}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="margin: 10px;">
+          <mat-card-title-group>
+            <mat-card-title>Adjusted Salary</mat-card-title>
+            <mat-card-subtitle>Salary minus deductions</mat-card-subtitle>
+          </mat-card-title-group>
+          <mat-card-content>
+            <p *ngFor="let periodLength of getPayPeriodLengths()" >
+              {{periodLength}}: ${{salarySummary.adjustedSalary[periodLength]}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card style="margin: 10px;">
+          <mat-card-title>Deductions</mat-card-title>
+          <mat-card-content>
+            <p *ngFor="let periodLength of getPayPeriodLengths()" >
+              {{periodLength}}: ${{salarySummary.deductions[periodLength]}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card>
+    <div fxLayout="column" style="width: 300px">
+      <mat-card style="margin: 10px">
+        <mat-card-title>Paycheck Info</mat-card-title>
+        <mat-card-content fxLayout="column">
+          <h4>Paychecks Per Year: {{paychecksPerYear}}</h4>
+          <mat-slider color="primary" [step]="1" [tickInterval]="5" [min]="1" [max]="50" [thumbLabel]="true" [(ngModel)]="newPaychecksPerYear"></mat-slider>
+          <h3>Amount Per Paycheck</h3>
+          <h4>Amount Per Paycheck: {{amountPerPaycheck | currency:'USD'}}</h4>
+
+          <mat-slider color="primary" [step]="200" [tickInterval]="1000" [min]="0" [max]="10000" [thumbLabel]="true" [(ngModel)]="newAmountPerPaycheck"></mat-slider>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button
+                  (click)="submitPaycheckChanges()"
+                  color="primary"
+                  style="margin: auto"
+                  [disabled]="newPaychecksPerYear == paychecksPerYear && newAmountPerPaycheck == amountPerPaycheck" >
+           Update</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
 </mat-sidenav-container>
 

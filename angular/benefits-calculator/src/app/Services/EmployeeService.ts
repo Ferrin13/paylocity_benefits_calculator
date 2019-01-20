@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Employee} from "../entities/Employee";
 import {Dependent} from "../entities/Dependent";
+import {PayPeriodLength, SalarySummary} from "../entities/SalarySummary";
 
 @Injectable({
   providedIn: 'root',
@@ -42,5 +43,9 @@ export class EmployeeService {
 
   deleteDependent(employeeId: number, dependentId: number): Observable<Object> {
     return this.http.delete(`${this.baseURL}/${employeeId}/dependent/${dependentId}`);
+  }
+
+  getEmployeeSalarySummary(employeeId: number) : Observable<SalarySummary> {
+    return this.http.get<SalarySummary>(`${this.baseURL}/${employeeId}/salary/summary`)
   }
 }

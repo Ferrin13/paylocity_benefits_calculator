@@ -4,6 +4,10 @@ import {Employee} from "./entities/Employee";
 import {EmployeeService} from "./Services/EmployeeService";
 import {SelectionModel} from "@angular/cdk/collections";
 import {Dependent, DependentType} from "./entities/Dependent";
+import {PayPeriodLength, SalarySummary} from "./entities/SalarySummary";
+import {ExpensesService} from "./Services/ExpensesService";
+import {PaycheckService} from "./Services/PaycheckService";
+import {mergeMap} from "rxjs/operators";
 
 export interface AddEmployeeDialogData {
   firstName: string;
@@ -17,7 +21,17 @@ export interface AddEmployeeDialogData {
 })
 export class AppComponent {
   title = 'Angular Test Page';
+  dependentListDefaultTitle = "No Employee Selected";
+
   employeeList: Employee[] = [];
+
+  selectedEmployee: Employee;
+  selectedEmployeeSalarySummary: SalarySummary = new SalarySummary();
+  salarySummary = new SalarySummary();
+  paychecksPerYear : number;
+  amountPerPaycheck: number;
+  newPaychecksPerYear : number;
+  newAmountPerPaycheck: number;
 
   @ViewChild('employeeSelectionList')
   employeeSelectionList: MatSelectionList;
@@ -25,30 +39,55 @@ export class AppComponent {
   @ViewChild('dependentDisplayList')
   dependentDisplayList: MatSelectionList;
 
-  selectedEmployee: Employee;
-  dependentListDefaultTitle = "No Employee Selected";
-  dependentListTitle = this.dependentListDefaultTitle;
-
   constructor(private employeeService: EmployeeService,
+              private expensesService: ExpensesService,
+              private paycheckService: PaycheckService,
               public dialog: MatDialog) {
-    employeeService.getAllEmployees().subscribe(employees =>
-        this.employeeList = employees
-    );
+    employeeService.getAllEmployees().subscribe(employees => {
+      this.employeeList = employees;
+      this.updatePaycheckInfo();
+    });
   }
 
   ngOnInit() {
     this.employeeSelectionList.selectedOptions = new SelectionModel<MatListOption>(false)
   }
 
+  updateExpenseInfo() {
+    this.expensesService.getSalarySummary().subscribe(salarySummary =>
+      this.salarySummary = salarySummary
+    );
+    if(this.selectedEmployee) {
+      this.employeeService.getEmployeeSalarySummary(this.selectedEmployee.id).subscribe(sSummary =>
+        this.selectedEmployeeSalarySummary = sSummary
+      )
+    }
+  }
+
+  updatePaycheckInfo() {
+    this.paycheckService.getAmountPerPaycheck().pipe(
+      mergeMap(amount => {
+        this.amountPerPaycheck = amount;
+        this.newAmountPerPaycheck = amount;
+        return this.paycheckService.getNumYearlyPaychecks();
+      })
+    ).subscribe(numYearly => {
+      this.paychecksPerYear = numYearly;
+      this.newPaychecksPerYear = numYearly;
+      this.updateExpenseInfo();
+    });
+  }
+
   selectEmployee(employee: Employee) {
     this.selectedEmployee = employee;
-    // this.dependentList = employee.dependents;
+    this.updateExpenseInfo();
   }
 
   addEmployee(employee: Employee) {
-    this.employeeService.addEmployee(employee).subscribe(employee =>
-      this.employeeList.push(employee)
-    );
+    this.employeeService.addEmployee(employee).subscribe(employee => {
+      this.employeeList.push(employee);
+      this.updateExpenseInfo();
+    })
   }
 
   deleteEmployee(employee: Employee) {
@@ -58,22 +97,25 @@ export class AppComponent {
       if(this.selectedEmployee == employee) {
         this.selectedEmployee = undefined;
       }
+      this.updateExpenseInfo();
     })
   }
 
   addDependent(dependent: Dependent) {
     if(this.selectedEmployee) {
-      this.employeeService.addDependent(this.selectedEmployee.id, dependent).subscribe(dependent =>
-        this.selectedEmployee.dependents.push(dependent)
-      )
+      this.employeeService.addDependent(this.selectedEmployee.id, dependent).subscribe(dependent => {
+        this.selectedEmployee.dependents.push(dependent);
+        this.updateExpenseInfo();
+      })
     }
   }
 
   deleteDependent(dependent: Dependent) {
     if(this.selectedEmployee) {
-      this.employeeService.deleteDependent(this.selectedEmployee.id, dependent.id).subscribe(() =>
-        this.selectedEmployee.dependents = this.selectedEmployee.dependents .filter(d => d.id != dependent.id)
-      )
+      this.employeeService.deleteDependent(this.selectedEmployee.id, dependent.id).subscribe(() => {
+        this.selectedEmployee.dependents = this.selectedEmployee.dependents.filter(d => d.id != dependent.id);
+        this.updateExpenseInfo();
+      })
     }
   }
 
@@ -89,8 +131,20 @@ export class AppComponent {
     }
   }
 
-  onClick() {
-    console.log(this.selectedEmployee)
+  getPayPeriodLengths() {
+    return Object.keys(PayPeriodLength).filter(key => isNaN(Number(key)));
+  }
+
+  submitPaycheckChanges() {
+    this.paycheckService.setAmountPerPaycheck(this.newAmountPerPaycheck).pipe(
+      mergeMap(amount => {
+        this.amountPerPaycheck = amount;
+        return this.paycheckService.setNumYearlyPaychecks(this.newPaychecksPerYear);
+      })
+    ).subscribe(numYearly => {
+      this.paychecksPerYear = numYearly;
+      this.updateExpenseInfo();
+    });
   }
 
   addEmployeeDialog() {
