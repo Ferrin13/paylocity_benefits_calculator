@@ -20,7 +20,7 @@ export interface AddEmployeeDialogData {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Angular Test Page';
+  title = 'Employee Benefits Cost Calculator';
   dependentListDefaultTitle = "No Employee Selected";
 
   employeeList: Employee[] = [];
@@ -152,14 +152,16 @@ export class AppComponent {
       width: '250px',
       data: {}
     });
-    dialogRef.afterClosed().subscribe(result =>
-      this.addEmployee({
-        id: -1,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        dependents: []
-      })
-    )
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.addEmployee({
+          id: -1,
+          firstName: result.firstName,
+          lastName: result.lastName,
+          dependents: []
+        })
+      }
+    })
   };
 
   addDependentDialog() {
@@ -168,14 +170,16 @@ export class AppComponent {
       data: { dependentTypes: Object.keys(DependentType).filter(key => isNaN(Number(key)))}
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(DependentType[result.dependentType]);
-      let depType = <string> result.dependentType; //Fixes issue with TS compiler being confused about dependent type (https://stackoverflow.com/questions/17380845/how-to-convert-string-to-enum-in-typescript)
-      this.addDependent({
-        id: -1,
-        firstName: result.firstName,
-        lastName: result.lastName,
-        dependentType: DependentType[depType]
-      })}
+        if (result) {
+          let depType = <string>result.dependentType; //Fixes issue with TS compiler being confused about dependent type (https://stackoverflow.com/questions/17380845/how-to-convert-string-to-enum-in-typescript)
+          this.addDependent({
+            id: -1,
+            firstName: result.firstName,
+            lastName: result.lastName,
+            dependentType: DependentType[depType]
+          })
+        }
+      }
     )
 
   }

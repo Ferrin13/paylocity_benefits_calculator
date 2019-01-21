@@ -1,20 +1,13 @@
 <mat-sidenav-container>
-  <div style="text-align:center">
-    <h1>
-      Welcome to {{ title }}!
-    </h1>
-  </div>
-    <!--<img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">-->
-  <div fxLayout="row">
-    <mat-card fxFlex="595px" style="margin: 10px">
-      <h4>Selected Employee: {{selectedEmployee ? selectedEmployee.lastName + ", " + selectedEmployee.firstName : ""}}</h4>
-    </mat-card>
+  <div style="text-align:center" class="mat-display-1">
+    <h1 >{{ title }}</h1>
   </div>
   <div fxLayout="row" fxLayoutAlign="top">
-    <mat-card fxFlex="325px" style="margin: 10px">
-      <mat-card-title>
-        Employee List
-      </mat-card-title>
+    <mat-card fxFlex="325px" style="margin: 10px" ba>
+      <mat-card-title-group>
+        <mat-card-title>Employee List</mat-card-title>
+        <mat-card-subtitle>List of all employees</mat-card-subtitle>
+      </mat-card-title-group>
       <mat-list #employeeSelectionList style="height: 500px; overflow-y: auto">
         <mat-list-item *ngFor="let employee of employeeList" (click)="selectEmployee(employee)" [ngClass]="employee == selectedEmployee ? 'list-item-selected' : 'list-item-unselected'">
           <mat-icon matListIcon>account_circle</mat-icon>
@@ -31,7 +24,7 @@
         <button mat-raised-button (click)="addEmployeeDialog()" color="primary" style="margin: auto" >Add Employee</button>
       </mat-card-actions>
     </mat-card>
-    <mat-card fxFlex="300px" fxFlexAlign="top" style="margin: 10px">
+    <mat-card fxFlex="300px" fxFlexAlign="top" style="margin: 10px;">
       <mat-card-title-group>
         <mat-card-title>Dependents List</mat-card-title>
         <mat-card-subtitle>{{selectedEmployee ? selectedEmployee.firstName + " " + selectedEmployee.lastName + "'s dependents" : dependentListDefaultTitle}}</mat-card-subtitle>
@@ -61,7 +54,7 @@
           <mat-card-title>Salary</mat-card-title>
           <mat-card-content>
             <p *ngFor="let periodLength of getPayPeriodLengths()" >
-              {{periodLength}}: ${{selectedEmployeeSalarySummary.salary[periodLength]}}
+              {{periodLength}}: {{selectedEmployeeSalarySummary.salary[periodLength] | currency:'USD'}}
             </p>
           </mat-card-content>
         </mat-card>
@@ -72,7 +65,7 @@
           </mat-card-title-group>
           <mat-card-content>
             <p *ngFor="let periodLength of getPayPeriodLengths()" >
-              {{periodLength}}: ${{selectedEmployeeSalarySummary.adjustedSalary[periodLength]}}
+              {{periodLength}}: {{selectedEmployeeSalarySummary.adjustedSalary[periodLength] | currency:'USD'}}
             </p>
           </mat-card-content>
         </mat-card>
@@ -80,7 +73,7 @@
           <mat-card-title>Deductions</mat-card-title>
           <mat-card-content>
             <p *ngFor="let periodLength of getPayPeriodLengths()" >
-              {{periodLength}}: ${{selectedEmployeeSalarySummary.deductions[periodLength]}}
+              {{periodLength}}: {{selectedEmployeeSalarySummary.deductions[periodLength] | currency:'USD'}}
             </p>
           </mat-card-content>
         </mat-card>
@@ -97,7 +90,7 @@
           <mat-card-title>Salary</mat-card-title>
           <mat-card-content>
             <p *ngFor="let periodLength of getPayPeriodLengths()" >
-              {{periodLength}}: ${{salarySummary.salary[periodLength]}}
+              {{periodLength}}: {{salarySummary.salary[periodLength] | currency:'USD'}}
             </p>
           </mat-card-content>
         </mat-card>
@@ -108,7 +101,7 @@
           </mat-card-title-group>
           <mat-card-content>
             <p *ngFor="let periodLength of getPayPeriodLengths()" >
-              {{periodLength}}: ${{salarySummary.adjustedSalary[periodLength]}}
+              {{periodLength}}: {{salarySummary.adjustedSalary[periodLength] | currency:'USD'}}
             </p>
           </mat-card-content>
         </mat-card>
@@ -116,7 +109,7 @@
           <mat-card-title>Deductions</mat-card-title>
           <mat-card-content>
             <p *ngFor="let periodLength of getPayPeriodLengths()" >
-              {{periodLength}}: ${{salarySummary.deductions[periodLength]}}
+              {{periodLength}}: ${{salarySummary.deductions[periodLength] | currency:'USD'}}
             </p>
           </mat-card-content>
         </mat-card>
@@ -124,7 +117,9 @@
     </mat-card>
     <div fxLayout="column" style="width: 300px">
       <mat-card style="margin: 10px">
-        <mat-card-title>Paycheck Info</mat-card-title>
+        <mat-card-title-group>
+          <mat-card-title>Paycheck Info</mat-card-title>
+        </mat-card-title-group>
         <mat-card-content fxLayout="column">
           <h4>Paychecks Per Year: {{paychecksPerYear}}</h4>
           <mat-slider color="primary" [step]="1" [tickInterval]="5" [min]="1" [max]="50" [thumbLabel]="true" [(ngModel)]="newPaychecksPerYear"></mat-slider>
